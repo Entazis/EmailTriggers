@@ -1,0 +1,66 @@
+<div class="row">
+    <div class="col-md-6 col-md-offset-3 text-center">
+        <div class="page-header">
+            <h2>Test screen for Email triggers</h2>
+        </div>
+
+        <div class="row">
+            <section class="col-md-12 text-center">
+                <form action="{{ urls.urlTest }}" method="post">
+                    <label for="email">User: </label>
+                    <input type="text" id="email" name="email" placeholder="abcdef@codeberry.com"><br>
+                    <label for="date">Date: </label>
+                    <input type="text" id="date" name="date" placeholder="2019-03-15"><br>
+                    <label for="type">Email: </label>
+                    <select id="type" name="type" class="btn btn-secondary">
+                        <option value="weekly-report">Weekly report card</option>
+                        <option value="timehop">Timehop</option>
+                    </select><br><br>
+                    <input type="submit" value="Submit" class="btn btn-primary">
+                </form>
+            </section>
+        </div>
+        {{#if viewedUser}}
+        <div class="row">
+            <section class="col-md-12 text-left">
+                Subject: CodeBerry - {{#compare type 'weekly-report'}}Weekly-Report{{/compare}}{{#compare type 'timehop'}}Timehop{{/compare}}: {{date}}
+            </section>
+            <section class="col-md-12 text-center" style="border-style:double">
+                {{#if completedAssignmentCount }}
+                    {{#compare type 'weekly-report'}}
+                        {{#compare completedAssignmentCount 1}}
+                            <h3>{{ viewedUser.personalData.fullName }}, you've completed the "{{#each completedAssignments}}{{assignment}}{{/each}}" assignment last week.</h3>
+                        {{/compare}}
+                        {{#compare completedAssignmentCount 1 operator=">"}}
+                            <h3>{{ viewedUser.personalData.fullName }}, you've completed {{ completedAssignmentCount }} assignments last week.</h3>
+                            {{#if completedAssignments}}
+                                <p>You have finished the following assignments:</p>
+                                {{#each completedAssignments}}
+                                    <li>{{assignment}}</li>
+                                {{/each}}
+                            {{/if}}
+                        {{/compare}}
+                    {{/compare}}
+                    {{#compare type 'timehop'}}
+                        {{#compare completedAssignmentCount 1}}
+                            <h3>Yesterday you've completed the "{{#each completedAssignments}}{{assignment}}{{/each}}" assignment.</h3>
+                        {{/compare}}
+                        {{#compare completedAssignmentCount 1 operator=">"}}
+                            <h3>Yesterday you've completed {{ completedAssignmentCount }} assignments.</h3>
+                            {{#if completedAssignments}}
+                                <p>You have finished the following assignments:</p>
+                                {{#each completedAssignments}}
+                                    <li>{{assignment}}</li>
+                                {{/each}}
+                            {{/if}}
+                        {{/compare}}
+                    {{/compare}}
+                    <h3>Congratulations!</h3><br>
+                    <p>The next assignment is: {{nextAssignment}}</p>
+                    <a href="https://orange.codeberryschool.com/lessons" target="_blank" class="btn btn-primary">Continue learning</a><br><br>
+                {{/if}}
+            </section>
+        </div>
+        {{/if}}
+    </div>
+</div>
